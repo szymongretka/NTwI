@@ -13,7 +13,9 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 porter = PorterStemmer()
 lancaster = LancasterStemmer()
 
-sentence="Pythoners are very intelligent and work very pythonly and now they are pythoning their way to success."
+file=open("test.txt")
+my_lines_list=file.readlines()
+my_lines_list
 
 def stemSentence(sentence):
     token_words=word_tokenize(sentence)
@@ -24,5 +26,21 @@ def stemSentence(sentence):
         stem_sentence.append(" ")
     return "".join(stem_sentence)
 
-x=stemSentence(sentence)
+print(my_lines_list[0])
+print("Stemmed sentence")
+x=stemSentence(my_lines_list[0])
 print(x)
+
+stem_file=open("result.txt",mode="a+", encoding="utf-8")
+for line in my_lines_list:
+    stem_sentence=stemSentence(line)
+    stem_file.write(stem_sentence)
+
+
+text_file=nltk.corpus.gutenberg.words('melville-moby_dick.txt')
+my_lines_list2=[]
+for line in text_file:
+    my_lines_list2.append(line)
+my_lines_list2
+
+stem_file.close()
