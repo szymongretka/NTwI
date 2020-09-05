@@ -1,25 +1,28 @@
-from core.granulation.granulizer import Granulizer
-from core.keywords.keywords_searcher import search_keywords_in_granule
-from core.granulation.granule import Granule
-
-
-def granulize_text(text: str) -> Granule:
-    granulizer = Granulizer()
-    return granulizer.granulize(text)
+from core.keywords.keywords_searcher import RAKEKeywordsSearcher
 
 
 def test_no_keywoards_for_empty_test():
     text = ""
-    granule = granulize_text(text)
-    keywords = search_keywords_in_granule(granule)
+    searcher = RAKEKeywordsSearcher()
+    keywords_phrases = searcher.search_keyword_phrases(text)
 
-    assert len(keywords) == 0
+    assert len(keywords_phrases) == 0
 
 
 def test_simple_sentence_for_keywoards_search():
-    text = "The quick brown fox jumps over the lazy dog."
-    granule = granulize_text(text)
+    # (PDF) Automatic Keyword Extraction from Individual Documents. Available from: https://www.researchgate.net/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents.
 
-    keywords = search_keywords_in_granule(granule)
+    text = """
+    Compatibility of systems of linear constraints over the set of natural numbers.
+    
+    Criteria of compatibility of a system of linear Diophantine equations, strict inequations, and nonstrict inequations are considered. 
+    Upper bounds for components of a minimal set of solutions and algorithms of construction of minimal generating sets of solutions for all types of systems are given. 
+    These criteria and the corresponding algorithms for constructing a minimal supporting set of solutions can be used in solving all the considered types of systems and systems of mixed types. 
+    """
 
-    assert len(keywords) > 0
+    searcher = RAKEKeywordsSearcher()
+    top_keywords_phrases = searcher.search_keyword_phrases(text)[:10]
+
+    assert 'linear diophantine equations' in top_keywords_phrases
+    assert 'minimal supporting set' in top_keywords_phrases
+    assert 'natural numbers' in top_keywords_phrases
