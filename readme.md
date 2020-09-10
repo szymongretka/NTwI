@@ -19,7 +19,7 @@ Parser by default uses localhost and port 9000. To tweak this settings set up a 
     
 ### Usage
 ##### Windows
-    Get-Content .\text_to_summarize.txt | py.exe 
+    Get-Content .\text_to_summarize.txt | py.exe main.py
 
 ##### *nix
     cat ./text_to_summarize.txt | python3 main.py
