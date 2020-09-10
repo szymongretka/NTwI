@@ -28,7 +28,8 @@ class WordGranule(Granule):
 
 class SentenceGranule(Granule):
 
-    def __init__(self, words_granules: List[WordGranule]):
+    def __init__(self, words_granules: List[WordGranule], original: str):
+        self._original = original
         self.words_granules = words_granules
 
         lemmatizer = WordNetLemmatizer()
@@ -43,7 +44,7 @@ class SentenceGranule(Granule):
             yield word.word_token
 
     def to_string(self) -> str:
-        return ''.join([' {0} '.format(granule.to_string()) for granule in self.words_granules])
+        return self._original
 
 
 class TextGranule(Granule):
@@ -57,4 +58,4 @@ class TextGranule(Granule):
                 yield word.word_token
 
     def to_string(self) -> str:
-        return ''.join([granule.to_string() for granule in self.sentences_granules])
+        return '\n'.join([granule.to_string() for granule in self.sentences_granules])
