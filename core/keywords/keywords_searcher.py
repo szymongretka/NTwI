@@ -5,6 +5,7 @@ from collections import Counter, defaultdict
 from core.granulation.granule import Granule
 from core.tokenization.word_token import WordToken
 import nltk
+from core.filter.filter_stop_words import ignorable_tokens
 
 
 class RAKEKeywordsSearcher(object):
@@ -13,15 +14,10 @@ class RAKEKeywordsSearcher(object):
     https://www.researchgate.net/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents
     """
 
-    def __init__(self, lang='english', punctations: str = None, stopwords: List[str] = None, min_length=1, max_length=10):
+    def __init__(self, lang='english', min_length=1, max_length=10):
         self.__lang = lang
-        self.__punctuations = punctations if punctations is not None else string.punctuation
-        self.__stopwords = stopwords if stopwords is not None else nltk.corpus.stopwords.words(
-            lang)
         self.__min_length = min_length
         self.__max_length = max_length
-        self.__ignorable_tokens = set(
-            chain(self.__stopwords, self.__punctuations))
 
     def search_keyword_phrases(self,
                                text: str) -> List[str]:
@@ -49,7 +45,7 @@ class RAKEKeywordsSearcher(object):
         words_sequence = []
 
         for word in words:
-            if word in self.__ignorable_tokens:
+            if word in ignorable_tokens:
                 if self.__min_length <= len(words_sequence) <= self.__max_length:
                     yield tuple(words_sequence)
                 words_sequence.clear()

@@ -1,6 +1,8 @@
 from typing import List, Generator
 from abc import ABC, abstractmethod
 from core.tokenization.word_token import WordToken
+from core.filter.filter_stop_words import filter_stop_word_tokens
+from nltk.stem import WordNetLemmatizer
 
 
 class Granule(ABC):
@@ -25,8 +27,16 @@ class WordGranule(Granule):
 
 
 class SentenceGranule(Granule):
+
     def __init__(self, words_granules: List[WordGranule]):
         self.words_granules = words_granules
+
+        lemmatizer = WordNetLemmatizer()
+        non_stop_word_tokens = filter_stop_word_tokens(
+            map(lambda g: g.word_token, words_granules))
+        lemmatized_words = map(
+            lambda t: lemmatizer.lemmatize(t.word), non_stop_word_tokens)
+        self.lemmatized_non_stop_words = list(lemmatized_words)
 
     def get_word_tokens_iter(self) -> Generator[WordToken, None, None]:
         for word in self.words_granules:
