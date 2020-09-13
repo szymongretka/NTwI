@@ -13,13 +13,13 @@ def test_text_word_token_iterator_with_sentences():
             WordGranule(WordToken("NN", "NLP")),
             WordGranule(WordToken("VBZ", "is")),
             WordGranule(WordToken("NN", "fun")),
-        ]),
+        ], 'NLP is fun'),
         SentenceGranule([
             WordGranule(WordToken("NN", "So")),
             WordGranule(WordToken("VBZ", "is")),
             WordGranule(WordToken("NN", "python")),
-        ]),
-        SentenceGranule([]),
+        ], 'So is python'),
+        SentenceGranule([], ''),
     ]
     text = TextGranule(sentences)
     iterator = text.get_word_tokens_iter()
